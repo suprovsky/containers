@@ -58,7 +58,7 @@ jobs:
     name: Build MongoDB 8.3-dev image
     runs-on: ubuntu-latest
     permissions:
-      package: write
+      packages: write
     steps:
       - uses: actions/checkout@v7
       - name: Set up Docker Buildx
