@@ -1,0 +1,17 @@
+FROM ubuntu:latest AS builder
+ARG MONGO_HEALTHCHECK_VERSION=1.0.0
+ARG ARCH=amd64
+ARG MONGO_HEALTHCHECK_CHECKSUM=30a935e82b627a1dd7491c9eba057ca0ac980c7eb2f9c2e4be18a1f44d26efac
+ARG MONGO_HEALTHCHECK_URL=https://github.com/instant-solutions/mongo-healthcheck/releases/download/${MONGO_HEALTHCHECK_VERSION}/mongo-healthcheck-${MONGO_HEALTHCHECK_VERSION}-linux-${ARCH}.tar.gz
+ARG MONGO_HEALTHCHECK_FILE_NAME=mongo-healthcheck-${MONGO_HEALTHCHECK_VERSION}-linux-${ARCH}.tar.gz
+WORKDIR /download
+RUN export DEBIAN_FRONTEND=noninteractive \
+  && export TZ=Etc/UTC \
+  && apt-get -y update \
+  && apt-get install -y --no-install-recommends --no-install-suggests wget\
+  && rm -rf /var/lib/apt/lists/*
+ADD --checksum=sha256:${MONGO_HEALTHCHECK_CHECKSUM} "${MONGO_HEALTHCHECK_URL}" "/download/${MONGO_HEALTHCHECK_FILE_NAME}"
+RUN tar -xzf "/download/${MONGO_HEALTHCHECK_FILE_NAME}"
+FROM dhi.io/mongodb:8.3-dev
+COPY --from=builder "/download/mongo-healthcheck" /usr/bin/mongo-healthcheck
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3  ["CMD", "/usr/bin/mongo-healthcheck", "--url", "mongodb://localhost:27017"]
