@@ -27,6 +27,8 @@ jobs:
   mongodb-83:
     name: Build MongoDB 8.3 image
     runs-on: ubuntu-latest
+    permissions:
+      package: write
     steps:
       - uses: actions/checkout@v7
       - name: Set up Docker Buildx
@@ -50,11 +52,13 @@ jobs:
           file: packages/mongodb/Dockerfile-8.3
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/mongodb:8.3
-          platform: linux/amd64
+          platforms: linux/amd64
 
   mongodb-83-dev:
     name: Build MongoDB 8.3-dev image
     runs-on: ubuntu-latest
+    permissions:
+      package: write
     steps:
       - uses: actions/checkout@v7
       - name: Set up Docker Buildx
@@ -78,4 +82,4 @@ jobs:
           file: packages/mongodb/Dockerfile-8.3-dev
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.OWNER }}/mongodb:8.3-dev
-          platform: linux/amd64
+          platforms: linux/amd64
