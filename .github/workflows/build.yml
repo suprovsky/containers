@@ -40,7 +40,7 @@ jobs:
       - name: Log in to Docker Hardened Images
         uses: docker/login-action@v4
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: dhi.io
           username: ${{ env.OWNER }}
           password: ${{ secrets.DHI_TOKEN }}
       - name: Build and push MongoDB 8.3 image
@@ -68,7 +68,7 @@ jobs:
       - name: Log in to Docker Hardened Images
         uses: docker/login-action@v4
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: dhi.io
           username: ${{ env.OWNER }}
           password: ${{ secrets.DHI_TOKEN }}
       - name: Build and push MongoDB 8.3-dev image
