@@ -14,4 +14,4 @@ ADD --checksum=sha256:${MONGO_HEALTHCHECK_CHECKSUM} "${MONGO_HEALTHCHECK_URL}" "
 RUN tar -xzf "/download/${MONGO_HEALTHCHECK_FILE_NAME}"
 FROM dhi.io/mongodb:8.3-dev
 COPY --from=builder "/download/mongo-healthcheck" /usr/bin/mongo-healthcheck
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3  ["CMD", "/usr/bin/mongo-healthcheck", "--url", "mongodb://localhost:27017"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 CMD ["/usr/bin/mongo-healthcheck", "-uri", "mongodb://localhost:27017"]
